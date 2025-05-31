@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="pet.js"></script>
+    <link rel="stylesheet" href="pet.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Pet - AgendaEz</title>
+</head>
+<body>
+    
+    <nav class="nav-bar">
+        <button onclick="window.location.href='index.html'" class="nav-btn">📅 Organizer</button>
+        <button onclick="window.location.href='pet.html'" class="nav-btn">🐾 My Pet</button>
+        <button onclick="window.location.href='homescreen.html'" class="nav-btn">🏠 Home</button>
+    </nav>
+
+    <div class="points-display">
+        ⭐ Points: <span id="pointsCount">0</span>
+    </div>
+
+
+    <div class="pet-container">
+        <div class="pet-selection">
+            <div class="pet-option owned selected" onclick="selectPet('🐱')" data-pet="🐱">
+                <span>🐱</span>
+                <span class="pet-price">Starter Pet</span>
+            </div>
+            <div class="pet-option" onclick="purchasePet('🐶', 100)" data-pet="🐶">
+                <span>🐶</span>
+                <span class="pet-price">⭐️ 100</span>
+            </div>
+            <div class="pet-option" onclick="purchasePet('🐰', 200)" data-pet="🐰">
+                <span>🐰</span>
+                <span class="pet-price">⭐️ 200</span>
+            </div>
+            <div class="pet-option" onclick="purchasePet('🐹', 300)" data-pet="🐹">
+                <span>🐹</span>
+                <span class="pet-price">⭐️ 300</span>
+            </div>
+            <div class="pet-option" onclick="purchasePet('🦊', 500)" data-pet="🦊">
+                <span>🦊</span>
+                <span class="pet-price">⭐️ 500</span>
+            </div>
+            <div class="pet-option" onclick="purchasePet('🐼', 1000)" data-pet="🐼">
+                <span>🐼</span>
+                <span class="pet-price">⭐️ 1000</span>
+            </div>
+        </div>
+        <div class="pet-avatar" id="petAvatar">🐱</div>
+        <div class="pet-name">
+            <span id="petName">Cat</span>
+            <button class="edit-name-button" onclick="editName()">✏️</button>
+            <span class="name-change-price">⭐️ 50</span>
+        </div>
+        
+        <div class="exp-container">
+            <div class="level-display">
+                <span>Level</span>
+                <span class="level-badge" id="levelDisplay">1</span>
+            </div>
+            <div class="exp-bar">
+                <div class="exp-fill" id="expFill"></div>
+            </div>
+            <div id="expText">0 / 100 EXP</div>
+        </div>
+
+        <div class="pet-stats">
+            <div class="stat">
+                <div>Happiness</div>
+                <div id="happiness">100%</div>
+            </div>
+            <div class="stat">
+                <div>Energy</div>
+                <div id="energy">100%</div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-button" onclick="feed()">
+                <span>🍖</span>
+                <span>Feed</span>
+            </button>
+            <button class="action-button" onclick="play()">
+                <span>🎾</span>
+                <span>Play</span>
+            </button>
+            <button class="action-button" onclick="sleep()">
+                <span>😴</span>
+                <span>Sleep</span>
+            </button>
+            <button class="action-button" onclick="pet()">
+                <span>💝</span>
+                <span>Pet</span>
+            </button>
+        </div>
+    </div>
+
+    
+</body>
+</html> 

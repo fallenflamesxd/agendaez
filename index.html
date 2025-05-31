@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AgendaEz - Schedule</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="schedule.css">
+    <script src="schedule.js" defer></script>
+</head>
+<body>
+    <nav class="nav-bar">
+        <button onclick="window.location.href='index.html'" class="nav-btn">📅 Organizer</button>
+        <button onclick="window.location.href='pet.html'" class="nav-btn">🐾 My Pet</button>
+        <button onclick="window.location.href='homescreen.html'" class="nav-btn">🏠 Home</button>
+    </nav>
+    <div class="points-display">
+        ⭐ Points: <span id="pointsCount">0</span>
+    </div>
+    <main>
+        <section id="add-event">
+            <h2>Add Event</h2>
+            <form id="event-form">
+                <input type="text" id="event-title" placeholder="Event Title" required>
+                <input type="date" id="event-date" required>
+                <input type="time" id="event-time_start" required>
+                <input type="time" id="event-time_end" required>
+                <button type="submit">Add</button>
+            </form>
+        </section>
+        <section id="schedule">
+            <h2>Schedule</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>✔</th>
+                        <th>Date</th>
+                        <th>Time Start</th>
+                        <th>Time End</th>
+                        <th>Event</th>
+                    </tr>
+                </thead>
+            
+                <tbody id="events-list">
+                    
+                    <!-- Events will be added here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    
+
+    <button onclick = resetPoints()>rst</button>
+</body>
+</html>

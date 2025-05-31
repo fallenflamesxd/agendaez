@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AgendaEz - Homescreen</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="homescreen.css">
+    <script src="homescreen.js" defer></script>
+</head>
+<body>
+
+  <nav class="nav-bar">
+        <button onclick="window.location.href='index.html'" class="nav-btn">📅 Organizer</button>
+        <button onclick="window.location.href='pet.html'" class="nav-btn">🐾 My Pet</button>
+        <button onclick="window.location.href='homescreen.html'" class="nav-btn">🏠 Home</button>
+    </nav>
+  
+
+  <div class="points-display">
+    ⭐ Points: <span id="pointsCount">0</span>
+</div>
+
+  <div class="title-card">
+    <div class="logo-big">📅</div>
+    <h1 class="main-title">Welcome to AgendaEz</h1>
+    <p class="subtitle">
+        Your all-in-one organizer and virtual pet companion.<br>
+        Use the navigation above to get started!
+    </p>
+</div>
+
+
+    <main class="homescreen-main">
+        <div class="dashboard">
+            <div class="time-calendar-row">
+                <div class="clock-box">
+                    <div class="digital-clock" id="digitalClock">06:30</div>
+                    <div class="date-label" id="dateLabel">JUNE 24<sup>TH</sup> 2025</div>
+                </div>
+                <div class="calendar-box">
+                    <!-- Placeholder for calendar, can be replaced with a real calendar widget -->
+                    <table class="mini-calendar">
+                        <thead>
+                            <tr>
+                                <th>SUN</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td></td><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+                            <tr><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td></tr>
+                            <tr><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td></tr>
+                            <tr><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td></tr>
+                            <tr><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="days-row" id="daysRow">
+                <div class="day-circle">21</div>
+                <div class="day-circle">22</div>
+                <div class="day-circle">23</div>
+                <div class="day-circle today">
+                    <div class="today-label">TODAY</div>
+                    24
+                </div>
+                <div class="day-circle">25</div>
+                <div class="day-circle">26</div>
+            </div>
+            <div class="stats-row">
+  
+    <div class="stat-box time">
+        <div class="stat-label">HOURS REMAINING</div>
+        <div class="stat-value"><span id="hoursRemaining">0</span> HRS</div>
+    </div>
+</div>
+          
+</body>
+</html>

@@ -87,13 +87,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateStreakDisplay() {
-        // Always check for streak reset before displaying
-        checkStreakReset();
-        const streak = parseInt(localStorage.getItem('streak')) || 0;
-        const streakCount = document.getElementById('streakCount');
-        if (streakCount) streakCount.textContent = streak;
-    }
+    checkStreakReset();
+    const streak = parseInt(localStorage.getItem('streak')) || 0;
+    const streakCount = document.getElementById('streakCount');
+    if (streakCount) streakCount.textContent = streak;
 
+    // Highlight red if streak not done today
+    const streakDisplay = document.getElementById('streakDisplay');
+    const lastStreakDate = localStorage.getItem('lastStreakDate');
+    const today = new Date().toISOString().slice(0, 10);
+    if (streakDisplay) {
+        if (lastStreakDate !== today) {
+            streakDisplay.classList.add('streak-warning');
+        } else {
+            streakDisplay.classList.remove('streak-warning');
+        }
+    }
+}
     // Initial display and keep in sync every second
     setInterval(() => {
         updateClockAndStats();

@@ -16,8 +16,8 @@ const petPrices = {
 };
 const NAME_CHANGE_PRICE = 50;
 const FEED_PRICE = 5;
-const SLEEP_PRICE = 4;
-const PLAY_ENERGY_COST = 20;
+const SLEEP_PRICE = 50;
+const PLAY_ENERGY_COST = 10;
 const PET_ENERGY_COST = 5;
 
 // --- DISPLAY UPDATE ---
@@ -94,10 +94,24 @@ function feed() {
     points -= FEED_PRICE;
     energy = Math.min(100, energy + 20);
     happiness = Math.min(100, happiness + 5);
+
+    // --- Eating animation ---
+    const foodEmoji = document.getElementById('foodEmoji');
+    if (foodEmoji) {
+        // Reset animation if clicked rapidly
+        foodEmoji.classList.remove('eating');
+        void foodEmoji.offsetWidth; // force reflow
+        foodEmoji.style.display = 'inline-block';
+        foodEmoji.classList.add('eating');
+        setTimeout(() => {
+            foodEmoji.classList.remove('eating');
+            foodEmoji.style.display = 'none';
+        }, 700); // match animation duration
+    }
+
     savePetState();
     updatePetDisplay();
 }
-
 function sleep() {
     if (energy >= 100) {
         alert("Your pet's energy is already full!");
@@ -110,6 +124,20 @@ function sleep() {
     points -= SLEEP_PRICE;
     energy = 100;
     happiness = Math.min(100, happiness + 2);
+
+    // --- Sleep animation ---
+    const sleepEmoji = document.getElementById('sleepEmoji');
+    if (sleepEmoji) {
+        sleepEmoji.classList.remove('sleeping');
+        void sleepEmoji.offsetWidth; // force reflow
+        sleepEmoji.style.display = 'inline-block';
+        sleepEmoji.classList.add('sleeping');
+        setTimeout(() => {
+            sleepEmoji.classList.remove('sleeping');
+            sleepEmoji.style.display = 'none';
+        }, 1000); // match animation duration
+    }
+
     savePetState();
     updatePetDisplay();
 }
@@ -121,7 +149,21 @@ function play() {
     }
     energy -= PLAY_ENERGY_COST;
     happiness = Math.min(100, happiness + 25);
-    points += 10; // reward for playing
+    points -= PLAY_ENERGY_COST;
+
+    // --- Play animation ---
+    const playEmoji = document.getElementById('playEmoji');
+    if (playEmoji) {
+        playEmoji.classList.remove('playing');
+        void playEmoji.offsetWidth; // force reflow
+        playEmoji.style.display = 'inline-block';
+        playEmoji.classList.add('playing');
+        setTimeout(() => {
+            playEmoji.classList.remove('playing');
+            playEmoji.style.display = 'none';
+        }, 800); // match animation duration
+    }
+
     savePetState();
     updatePetDisplay();
 }
@@ -131,8 +173,27 @@ function pet() {
         alert("Not enough energy to pet!");
         return;
     }
+    if (points < PET_ENERGY_COST) {
+        alert(`You need ${PET_ENERGY_COST} points to pet your pet.`);
+        return;
+    }
+    points -= PET_ENERGY_COST;
     energy -= PET_ENERGY_COST;
     happiness = Math.min(100, happiness + 10);
+
+    // --- Petting animation ---
+    const petHand = document.getElementById('petHand');
+    if (petHand) {
+        petHand.classList.remove('petting');
+        void petHand.offsetWidth; // force reflow
+        petHand.style.display = 'inline-block';
+        petHand.classList.add('petting');
+        setTimeout(() => {
+            petHand.classList.remove('petting');
+            petHand.style.display = 'none';
+        }, 900); // match animation duration
+    }
+
     savePetState();
     updatePetDisplay();
 }

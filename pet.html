@@ -53,6 +53,17 @@
             <button class="edit-name-button" onclick="editName()">✏️</button>
             <span class="name-change-price">⭐️ 50</span>
         </div>
+
+       <!-- Inside .pet-container, replace the duplicate petAvatar and foodEmoji with: -->
+<div class="pet-avatar-container" style="position: relative; display: flex; align-items: center; justify-content: center; margin: 1.5em 0;">
+  <span id="petAvatar" style="font-size: 4em; position: relative; z-index: 1;">🐱</span>
+  <span id="foodEmoji" style="display:none; font-size:2em; position: absolute; left: 50%; top: 120%; transform: translateX(-50%); z-index: 2;">🍖</span>
+  <span id="playEmoji" style="display:none; font-size:2em; position: absolute; left: 50%; top: 120%; transform: translateX(-50%); z-index: 2;">🎾</span>
+  <span id="sleepEmoji" style="display:none; font-size:2em; position: absolute; left: 50%; top: 120%; transform: translateX(-50%); z-index: 2;">💤</span>
+  <span id="petHand" style="display:none; font-size:2em; position: absolute; left: 50%; top: 120%; transform: translateX(-50%); z-index: 2;">🤚</span>
+</div>
+
+
         
         <div class="exp-container">
             <div class="level-display">
@@ -79,19 +90,19 @@
         <div class="action-buttons">
             <button class="action-button" onclick="feed()">
                 <span>🍖</span>
-                <span>Feed</span>
+                <span>Feed - 5 Points</span>
             </button>
             <button class="action-button" onclick="play()">
                 <span>🎾</span>
-                <span>Play</span>
+                <span>Play - 10 Points</span>
             </button>
             <button class="action-button" onclick="sleep()">
                 <span>😴</span>
-                <span>Sleep</span>
+                <span>Sleep - 50 Points</span>
             </button>
             <button class="action-button" onclick="pet()">
                 <span>💝</span>
-                <span>Pet</span>
+                <span>Pet - 5 Points</span>
             </button>
         </div>
     </div>

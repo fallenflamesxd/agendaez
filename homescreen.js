@@ -120,4 +120,24 @@ const themeToggle = document.getElementById('themeToggle');
         });
     }
 
+document.addEventListener('DOMContentLoaded', function() {
+    // ...your other code...
 
+    // Theme toggle logic (only here!)
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggle.textContent = "☀️ Light Mode";
+        } else {
+            document.body.classList.remove('dark-mode');
+            themeToggle.textContent = "🌙 Dark Mode";
+        }
+        themeToggle.addEventListener('click', function() {
+            const isDark = document.body.classList.toggle('dark-mode');
+            themeToggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+    }
+});

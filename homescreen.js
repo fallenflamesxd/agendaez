@@ -1,4 +1,3 @@
-// --- CLOCK, DATE, DAYS ROW, TASKS REMAINING, HOURS REMAINING, SCHEDULE LIST ---
 document.addEventListener('DOMContentLoaded', function() {
     function updateClockAndStats() {
         // --- CLOCK ---
@@ -87,16 +86,26 @@ document.addEventListener('DOMContentLoaded', function() {
         if (pointsCount) pointsCount.textContent = points;
     }
 
+    function updateStreakDisplay() {
+        // Always check for streak reset before displaying
+        checkStreakReset();
+        const streak = parseInt(localStorage.getItem('streak')) || 0;
+        const streakCount = document.getElementById('streakCount');
+        if (streakCount) streakCount.textContent = streak;
+    }
+
     // Initial display and keep in sync every second
     setInterval(() => {
         updateClockAndStats();
         renderScheduleList();
         updatePointsDisplay();
+        updateStreakDisplay();
     }, 1000);
 
     updateClockAndStats();
     renderScheduleList();
     updatePointsDisplay();
+    updateStreakDisplay();
 
     // THEME TOGGLE LOGIC (only once, at the end of DOMContentLoaded)
     const themeToggle = document.getElementById('themeToggle');
@@ -117,3 +126,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// --- Streak logic helpers (outside DOMContentLoaded) ---
+function checkStreakReset() {
+    const today = new Date().toISOString().slice(0, 10);
+    const lastStreakDate = localStorage.getItem('lastStreakDate');
+    if (!lastStreakDate) return;
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    if (lastStreakDate !== today && lastStreakDate !== yesterday) {
+        localStorage.setItem('streak', 0);
+    }
+}

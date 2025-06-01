@@ -51,6 +51,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     window.addPointsForPlan = addPointsForPlan;
 
+    function updateStreakOnTaskComplete() {
+        console.log('updateStreakOnTaskComplete called');
+        const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        const lastStreakDate = localStorage.getItem('lastStreakDate');
+        let streak = parseInt(localStorage.getItem('streak')) || 0;
+
+        if (lastStreakDate === today) {
+            console.log('Already counted for today');
+            return;
+        }
+
+        if (!lastStreakDate) {
+            streak = 1;
+        } else {
+            const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+            if (lastStreakDate === yesterday) {
+                streak += 1;
+            } else {
+                streak = 1;
+            }
+        }
+
+        localStorage.setItem('streak', streak);
+        localStorage.setItem('lastStreakDate', today);
+        console.log('Streak updated:', streak, 'Last date:', today);
+    }
+
+    function checkStreakReset() {
+        const today = new Date().toISOString().slice(0, 10);
+        const lastStreakDate = localStorage.getItem('lastStreakDate');
+        if (!lastStreakDate) return;
+        const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+        if (lastStreakDate !== today && lastStreakDate !== yesterday) {
+            localStorage.setItem('streak', 0);
+            console.log('Streak reset to 0');
+        }
+    }
+    checkStreakReset();
+
     function renderEvents() {
         eventsList.innerHTML = '';
         events.forEach((event, idx) => {
@@ -67,9 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('.complete-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', function() {
+                console.log('Checkbox changed!', this.checked, this.dataset.index);
                 const index = parseInt(this.dataset.index);
                 if (this.checked) {
                     addPointsForPlan();
+                    updateStreakOnTaskComplete();
                     events.splice(index, 1);
                     saveEvents();
                     renderEvents();

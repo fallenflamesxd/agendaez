@@ -713,3 +713,46 @@ body:not(.dark-mode) .switch-btn,
 body:not(.dark-mode) .theme-toggle {
   color: #fff;
 }
+
+/* --- Points Display Styling --- */
+.points-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 1.2rem 0 0.5rem 0;
+  padding: 0.5em 1.5em;
+  border-radius: 1.5em;
+  background: linear-gradient(90deg, #fef9c3 0%, #a7f3d0 100%);
+  color: #eab308;
+  box-shadow: 0 2px 12px rgba(234,179,8,0.10);
+  letter-spacing: 1px;
+  width: fit-content;
+  min-width: 180px;
+  gap: 0.5em;
+}
+
+.points-display span {
+  color: #0ea5e9;
+  font-weight: bold;
+  margin-left: 0.3em;
+}
+
+.points-display::before {
+  content: "⭐";
+  font-size: 1.5em;
+  margin-right: 0.5em;
+  filter: drop-shadow(0 2px 6px #ffd70088);
+}
+
+/* --- Dark mode overrides --- */
+body.dark-mode .points-display {
+  background: linear-gradient(90deg, #0e7490 0%, #0ea5e9 100%);
+  color: #ffd700;
+  box-shadow: 0 2px 12px rgba(14,116,144,0.18);
+}
+
+body.dark-mode .points-display span {
+  color: #ffd700;
+}

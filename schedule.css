@@ -518,3 +518,7 @@ body.dark-mode .switch-btn:hover {
   background: linear-gradient(90deg, #06b6d4 0%, #0ea5e9 100%);
   color: #fff;
 }
+
+body:not(.dark-mode), body:not(.dark-mode) * {
+  color: #111 !important;
+}

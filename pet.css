@@ -701,3 +701,6 @@ body:not(.dark-mode) .level-badge {
   text-shadow: none;
 }
 
+body:not(.dark-mode), body:not(.dark-mode) * {
+  color: #111 !important;
+}

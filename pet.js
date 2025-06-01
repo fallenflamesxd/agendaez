@@ -165,3 +165,22 @@ function addPoints(amount) {
     }
 
     // ...rest of your code...
+
+    // Theme toggle logic
+const themeToggle = document.getElementById('themeToggle');
+if (themeToggle) {
+    // Load saved theme
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggle.textContent = "☀️ Light Mode";
+    } else {
+        document.body.classList.remove('dark-mode');
+        themeToggle.textContent = "🌙 Dark Mode";
+    }
+    themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeToggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+}

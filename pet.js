@@ -1,7 +1,7 @@
 // --- PET STATE ---
 let points = parseInt(localStorage.getItem('points')) || 0;
-let petName = localStorage.getItem('petName') || "Fluffy";
 let petType = localStorage.getItem('petType') || "🐱";
+let petNames = JSON.parse(localStorage.getItem('petNames')) || { "🐱": "Fluffy" };
 let energy = parseInt(localStorage.getItem('petEnergy')) || 100;
 let happiness = parseInt(localStorage.getItem('petHappiness')) || 100;
 let ownedPets = JSON.parse(localStorage.getItem('ownedPets')) || ["🐱"];
@@ -23,7 +23,7 @@ const PET_ENERGY_COST = 5;
 // --- DISPLAY UPDATE ---
 function updatePetDisplay() {
     document.getElementById('pointsCount').textContent = points;
-    document.getElementById('petName').textContent = petName;
+    document.getElementById('petName').textContent = petNames[petType] || "Fluffy";
     document.getElementById('petAvatar').textContent = petType;
     document.getElementById('energy').textContent = energy + "%";
     document.getElementById('happiness').textContent = happiness + "%";
@@ -32,20 +32,19 @@ function updatePetDisplay() {
 // --- SAVE STATE ---
 function savePetState() {
     localStorage.setItem('points', points);
-    localStorage.setItem('petName', petName);
     localStorage.setItem('petType', petType);
+    localStorage.setItem('petNames', JSON.stringify(petNames));
     localStorage.setItem('petEnergy', energy);
     localStorage.setItem('petHappiness', happiness);
     localStorage.setItem('ownedPets', JSON.stringify(ownedPets));
 }
 
 // --- PET ACTIONS ---
-function buyPet(type) {
+function purchasePet(type, price) {
     if (ownedPets.includes(type)) {
         selectPet(type);
         return;
     }
-    const price = petPrices[type];
     if (points >= price) {
         if (confirm(`Buy ${type} for ${price} points?`)) {
             points -= price;
@@ -67,7 +66,7 @@ function selectPet(type) {
     }
 }
 
-function renamePet() {
+function editName() {
     if (points < NAME_CHANGE_PRICE) {
         alert(`You need ${NAME_CHANGE_PRICE} points to rename your pet.`);
         return;
@@ -76,14 +75,14 @@ function renamePet() {
     if (newName && newName.trim()) {
         if (confirm(`Rename pet to "${newName.trim()}" for ${NAME_CHANGE_PRICE} points?`)) {
             points -= NAME_CHANGE_PRICE;
-            petName = newName.trim();
+            petNames[petType] = newName.trim();
             savePetState();
             updatePetDisplay();
         }
     }
 }
 
-function feedPet() {
+function feed() {
     if (points < FEED_PRICE) {
         alert(`You need ${FEED_PRICE} points to feed your pet.`);
         return;
@@ -95,14 +94,14 @@ function feedPet() {
     updatePetDisplay();
 }
 
-function sleepPet() {
+function sleep() {
     energy = 100;
     happiness = Math.min(100, happiness + 2);
     savePetState();
     updatePetDisplay();
 }
 
-function playPet() {
+function play() {
     if (energy < PLAY_ENERGY_COST) {
         alert("Not enough energy to play!");
         return;
@@ -114,7 +113,7 @@ function playPet() {
     updatePetDisplay();
 }
 
-function petPet() {
+function pet() {
     if (energy < PET_ENERGY_COST) {
         alert("Not enough energy to pet!");
         return;
@@ -140,10 +139,19 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Make functions global for button onclicks
-window.buyPet = buyPet;
+window.purchasePet = purchasePet;
 window.selectPet = selectPet;
-window.renamePet = renamePet;
-window.feedPet = feedPet;
-window.sleepPet = sleepPet;
-window.playPet = playPet;
-window.petPet = petPet;
+window.editName = editName;
+window.feed = feed;
+window.sleep = sleep;
+window.play = play;
+window.pet = pet;
+
+function addPoints(amount) {
+        let points = parseInt(localStorage.getItem('points')) || 0;
+        points += amount;
+        if (points < 0) points = 0;
+        localStorage.setItem('points', points);
+        updatePointsDisplay();
+    }
+    window.addPoints = addPoints;

@@ -16,7 +16,7 @@ const petPrices = {
 };
 const NAME_CHANGE_PRICE = 50;
 const FEED_PRICE = 5;
-const SLEEP_PRICE = 0;
+const SLEEP_PRICE = 4;
 const PLAY_ENERGY_COST = 20;
 const PET_ENERGY_COST = 5;
 
@@ -83,6 +83,10 @@ function editName() {
 }
 
 function feed() {
+    if (energy >= 100) {
+        alert("Your pet's energy is already full!");
+        return;
+    }
     if (points < FEED_PRICE) {
         alert(`You need ${FEED_PRICE} points to feed your pet.`);
         return;
@@ -95,6 +99,15 @@ function feed() {
 }
 
 function sleep() {
+    if (energy >= 100) {
+        alert("Your pet's energy is already full!");
+        return;
+    }
+    if (points < SLEEP_PRICE) {
+        alert(`You need ${SLEEP_PRICE} points to let your pet sleep.`);
+        return;
+    }
+    points -= SLEEP_PRICE;
     energy = 100;
     happiness = Math.min(100, happiness + 2);
     savePetState();

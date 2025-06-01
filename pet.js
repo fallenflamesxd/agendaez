@@ -92,28 +92,13 @@ document.addEventListener('DOMContentLoaded', function() {
     updatePointsDisplay();
 });
 
-// --- POINTS SYNC ACROSS ALL SCREENS ---
+
 function updatePointsDisplay() {
-    const points = parseInt(localStorage.getItem('points')) || 0;
-    const pointsCount = document.getElementById('pointsCount');
+    points = parseInt(localStorage.getItem('points'));
+    pointsCount = document.getElementById('pointsCount');
     if (pointsCount) pointsCount.textContent = points;
 }
 
-function addPoints(amount) {
-    let points = parseInt(localStorage.getItem('points')) || 0;
-    points += amount;
-    if (points < 0) points = 0;
-    localStorage.setItem('points', points);
-    updatePointsDisplay();
-}
-window.addPoints = addPoints;
-
-function resetPoints() {
-    localStorage.setItem('points', 0);
-    updatePointsDisplay();
-}
-window.resetPoints = resetPoints;
-
-// Call this once and then every second to keep in sync
+// Initial display and keep in sync every second
 updatePointsDisplay();
 setInterval(updatePointsDisplay, 1000);

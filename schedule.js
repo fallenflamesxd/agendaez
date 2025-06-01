@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const eventsList = document.getElementById('events-list');
     const pointsCount = document.getElementById('pointsCount');
 
+    // Always update the points display from localStorage
     function updatePointsDisplay() {
         points = parseInt(localStorage.getItem('points')) || 0;
         if (pointsCount) pointsCount.textContent = points;
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             checkbox.addEventListener('change', function() {
                 const index = parseInt(this.dataset.index);
                 if (this.checked) {
-                    addPoints(1);
+                    addPoints(1); // This is the primary place points are incremented
                     events.splice(index, 1);
                     saveEvents();
                     renderEvents();

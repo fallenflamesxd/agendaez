@@ -26,7 +26,16 @@
                 <button type="submit">Add</button>
             </form>
         </section>
-        <section id="schedule">
+        <!-- Replace this: -->
+<!-- <button id="unlimitedBtn" type="button">Unlimited tasks: OFF</button> -->
+
+<!-- With this: -->
+<div id="planSelector" style="margin: 1em 0;">
+    <button type="button" class="plan-btn" data-plan="free">Free</button>
+    <button type="button" class="plan-btn" data-plan="pro">Pro</button>
+    <button type="button" class="plan-btn" data-plan="premium">Premium</button>
+    <span id="planLabel" style="margin-left:1em;">Current plan: Free</span>
+</div>
             <h2>Schedule</h2>
             <table>
                 <thead>
@@ -49,5 +58,6 @@
     
 
     <button onclick = resetPoints()>rst</button>
+    <button onclick = addPoints(50)>add</button>
 </body>
 </html>

@@ -318,3 +318,53 @@ tr:hover {
   font-weight: bold;
   letter-spacing: 1px;
 }
+
+/* Center the plan selector */
+.plan-selector-container {
+    display: flex;
+    justify-content: center;
+    margin: 2em 0 1em 0;
+}
+
+/* Plan selector background and layout */
+#planSelector {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    background: #164e63; /* deep cyan-blue */
+    border-radius: 1em;
+    padding: 1em 2em;
+    box-shadow: 0 2px 8px rgba(6,182,212,0.10);
+}
+
+/* Plan buttons styled to match nav and form buttons */
+.plan-btn {
+    background: linear-gradient(90deg, #0ea5e9 0%, #06b6d4 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.7rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    box-shadow: 0 2px 12px rgba(6,182,212,0.18);
+    letter-spacing: 1px;
+}
+
+.plan-btn:hover, .plan-btn.selected {
+    background: linear-gradient(90deg, #06b6d4 0%, #0ea5e9 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(6,182,212,0.25);
+    transform: translateY(-2px) scale(1.04);
+}
+
+/* Plan label styled to match headings */
+#planLabel {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #67e8f9;
+    margin-left: 1em;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px #0e7490;
+}

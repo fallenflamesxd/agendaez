@@ -133,7 +133,7 @@ function play() {
     }
     energy = Math.max(0, energy - PLAY_ENERGY_COST);
     happiness = Math.min(100, happiness + 25);
-    points -= PLAY_ENERGY_COST;
+    points -= 10;
 
     // --- Play animation ---
     animateEmoji('playEmoji', 'playing', 800);
@@ -151,7 +151,7 @@ function pet() {
         alert(`You need ${PET_ENERGY_COST} points to pet your pet.`);
         return;
     }
-    points -= PET_ENERGY_COST;
+    points -= 5;
     energy = Math.max(0, energy - PET_ENERGY_COST);
     happiness = Math.min(100, happiness + 10);
 

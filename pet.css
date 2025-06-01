@@ -891,3 +891,13 @@ body.dark-mode .points-display span {
   animation: pet-hand 0.9s cubic-bezier(.68,-0.55,.27,1.55);
   pointer-events: none;
 }
+
+@keyframes cat-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-18px); }
+}
+
+#petAvatar {
+  animation: cat-float 2.2s ease-in-out infinite;
+  /* keep your other styles like font-size, color, etc. */
+}

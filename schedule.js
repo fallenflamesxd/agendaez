@@ -39,6 +39,18 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('events', JSON.stringify(events));
     }
 
+    function addPointsForPlan() {
+        let plan = localStorage.getItem('plan') || 'free';
+        let amount = 1;
+        if (plan === 'pro') amount = 2;
+        else if (plan === 'premium') amount = 5;
+        let points = parseInt(localStorage.getItem('points')) || 0;
+        points += amount;
+        localStorage.setItem('points', points);
+        updatePointsDisplay();
+    }
+    window.addPointsForPlan = addPointsForPlan;
+
     function renderEvents() {
         eventsList.innerHTML = '';
         events.forEach((event, idx) => {
@@ -57,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             checkbox.addEventListener('change', function() {
                 const index = parseInt(this.dataset.index);
                 if (this.checked) {
-                    addPoints(1);
+                    addPointsForPlan();
                     events.splice(index, 1);
                     saveEvents();
                     renderEvents();
@@ -90,16 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
     });
 
-    // --- POINTS SYNC ACROSS ALL SCREENS ---
-    function addPoints(amount) {
-        let points = parseInt(localStorage.getItem('points')) || 0;
-        points += amount;
-        if (points < 0) points = 0;
-        localStorage.setItem('points', points);
-        updatePointsDisplay();
-    }
-    window.addPoints = addPoints;
-
     function resetPoints() {
         localStorage.setItem('points', 0);
         updatePointsDisplay();
@@ -110,32 +112,30 @@ document.addEventListener('DOMContentLoaded', () => {
     updatePointsDisplay();
     renderEvents();
     setInterval(updatePointsDisplay, 1000);
+
+    // THEME TOGGLE LOGIC (only once, at the end of DOMContentLoaded)
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggle.textContent = "☀️ Light Mode";
+        } else {
+            document.body.classList.remove('dark-mode');
+            themeToggle.textContent = "🌙 Dark Mode";
+        }
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            themeToggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+    } else {
+        // If no toggle, still sync theme from localStorage
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+    }
 });
-
-    // Sync theme from localStorage (no toggle here)
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-mode');
-    } else {
-        document.body.classList.remove('dark-mode');
-    }
-
-    // ...rest of your code...
-
-    // Theme toggle logic
-const themeToggle = document.getElementById('themeToggle');
-if (themeToggle) {
-    // Load saved theme
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-mode');
-        themeToggle.textContent = "☀️ Light Mode";
-    } else {
-        document.body.classList.remove('dark-mode');
-        themeToggle.textContent = "🌙 Dark Mode";
-    }
-    themeToggle.addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        themeToggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-}

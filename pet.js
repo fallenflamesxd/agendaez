@@ -130,12 +130,46 @@ function updatePointsDisplay() {
     document.getElementById('pointsCount').textContent = points;
 }
 
-// --- INIT ---
+function addPoints(amount) {
+    let points = parseInt(localStorage.getItem('points')) || 0;
+    points += amount;
+    if (points < 0) points = 0;
+    localStorage.setItem('points', points);
+    updatePointsDisplay();
+}
+
+// --- INIT & THEME TOGGLE ---
 document.addEventListener('DOMContentLoaded', function() {
     updatePetDisplay();
     setInterval(() => {
         updatePointsDisplay();
     }, 1000);
+
+    // THEME TOGGLE LOGIC (only once, at the end of DOMContentLoaded)
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggle.textContent = "☀️ Light Mode";
+        } else {
+            document.body.classList.remove('dark-mode');
+            themeToggle.textContent = "🌙 Dark Mode";
+        }
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            themeToggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+    } else {
+        // If no toggle, still sync theme from localStorage
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+    }
 });
 
 // Make functions global for button onclicks
@@ -146,41 +180,4 @@ window.feed = feed;
 window.sleep = sleep;
 window.play = play;
 window.pet = pet;
-
-function addPoints(amount) {
-        let points = parseInt(localStorage.getItem('points')) || 0;
-        points += amount;
-        if (points < 0) points = 0;
-        localStorage.setItem('points', points);
-        updatePointsDisplay();
-    }
-    window.addPoints = addPoints;
-
-
-    // Sync theme from localStorage (no toggle here)
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-mode');
-    } else {
-        document.body.classList.remove('dark-mode');
-    }
-
-    // ...rest of your code...
-
-    // Theme toggle logic
-const themeToggle = document.getElementById('themeToggle');
-if (themeToggle) {
-    // Load saved theme
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-mode');
-        themeToggle.textContent = "☀️ Light Mode";
-    } else {
-        document.body.classList.remove('dark-mode');
-        themeToggle.textContent = "🌙 Dark Mode";
-    }
-    themeToggle.addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        themeToggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-}
+window.addPoints = addPoints;

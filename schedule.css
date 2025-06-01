@@ -519,6 +519,15 @@ body.dark-mode .switch-btn:hover {
   color: #fff;
 }
 
-body:not(.dark-mode), body:not(.dark-mode) * {
-  color: #111 !important;
+body:not(.dark-mode) {
+  color: #111;
+}
+
+/* Ensure buttons and navs keep their intended color in light mode */
+body:not(.dark-mode) .nav-btn,
+body:not(.dark-mode) .plan-btn,
+body:not(.dark-mode) .action-button,
+body:not(.dark-mode) .switch-btn,
+body:not(.dark-mode) .theme-toggle {
+  color: #fff;
 }

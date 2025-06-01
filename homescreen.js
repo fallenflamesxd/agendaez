@@ -81,6 +81,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function updatePointsDisplay() {
+        const points = parseInt(localStorage.getItem('points')) || 0;
+        const pointsCount = document.getElementById('pointsCount');
+        if (pointsCount) pointsCount.textContent = points;
+    }
+
+    // Initial display and keep in sync every second
     setInterval(() => {
         updateClockAndStats();
         renderScheduleList();
@@ -90,19 +97,9 @@ document.addEventListener('DOMContentLoaded', function() {
     updateClockAndStats();
     renderScheduleList();
     updatePointsDisplay();
-});
 
-function updatePointsDisplay() {
-    const points = parseInt(localStorage.getItem('points')) || 0;
-    const pointsCount = document.getElementById('pointsCount');
-    if (pointsCount) pointsCount.textContent = points;
-}
-
-// Initial display and keep in sync every second
-updatePointsDisplay();
-setInterval(updatePointsDisplay, 1000);
-
-const themeToggle = document.getElementById('themeToggle');
+    // THEME TOGGLE LOGIC (only once, at the end of DOMContentLoaded)
+    const themeToggle = document.getElementById('themeToggle');
     if (themeToggle) {
         // Load saved theme
         if (localStorage.getItem('theme') === 'dark') {
@@ -115,27 +112,6 @@ const themeToggle = document.getElementById('themeToggle');
         themeToggle.addEventListener('click', function() {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
-            themeToggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
-    }
-
-document.addEventListener('DOMContentLoaded', function() {
-    // ...your other code...
-
-    // Theme toggle logic (only here!)
-    const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-        // Load saved theme
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-            themeToggle.textContent = "☀️ Light Mode";
-        } else {
-            document.body.classList.remove('dark-mode');
-            themeToggle.textContent = "🌙 Dark Mode";
-        }
-        themeToggle.addEventListener('click', function() {
-            const isDark = document.body.classList.toggle('dark-mode');
             themeToggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         });

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timer</title>
+    <link rel="stylesheet" href="timer.css">
+    <link rel="icon" type="image/x-icon" href="image-removebg-preview.png">
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html"><img src="image-removebg-preview.png"></a>
+        <a href="timer.html" class="navitems">Timer</a>
+        <a href="ringtones.html" class="navitems">Ringtone</a>
+        <a href="#" class="navitems">About</a>
+    </div>
+    <div class="timer-container">
+        <div class="inputs">
+            <div>
+                <label for="hours">Hours</label><br>
+                <input type="number" id="hours" min="0" max="99" value="0">
+            </div>
+            <div>
+                <label for="minutes">Minutes</label><br>
+                <input type="number" id="minutes" min="0" max="59" value="0">
+            </div>
+            <div>
+                <label for="seconds">Seconds</label><br>
+                <input type="number" id="seconds" min="0" max="59" value="0">
+            </div>
+        </div>
+        <div class="timer-display" id="timerDisplay">00:00:00</div>
+        <button id="startBtn">Start</button>
+        <button id="pauseBtn" disabled>Pause</button>
+        <button id="resetBtn" disabled>Reset</button>
+        <audio id="ringtone" preload="auto"></audio>
+        <div id="ringtone-popup" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:999; align-items:center; justify-content:center;">
+            <button id="stop-ringtone-btn" style="font-size:2em; padding:24px 48px; border-radius:12px; border:none; background:#0F828C; color:#fff; cursor:pointer;">Stop</button>
+        </div>
+    </div>
+    <div class="presets">
+        <button class="preset-btn" data-min="5">5 mins</button>
+        <button class="preset-btn" data-min="10">10 mins</button>
+        <button class="preset-btn" data-min="30">30 mins</button>
+        <button class="preset-btn" data-min="60">1 hr</button>
+    </div>
+    <script>
+    const hoursInput = document.getElementById('hours');
+    const minutesInput = document.getElementById('minutes');
+    const secondsInput = document.getElementById('seconds');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const startBtn = document.getElementById('startBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const ringtone = document.getElementById('ringtone');
+    const popup = document.getElementById('ringtone-popup');
+    const stopBtn = document.getElementById('stop-ringtone-btn');
+    const presetBtns = document.querySelectorAll('.preset-btn');
+
+    let totalSeconds = 0;
+    let interval = null;
+    let paused = false;
+
+    function pad(num) {
+        return num.toString().padStart(2, '0');
+    }
+
+    function setTimerRingtone() {
+        const selected = localStorage.getItem('selectedRingtone');
+        if (selected === 'custom') {
+            // Load custom file from IndexedDB
+            const request = indexedDB.open('RingtoneDB', 1);
+            request.onupgradeneeded = function(e) {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains('files')) {
+                    db.createObjectStore('files');
+                }
+            };
+            request.onsuccess = function(e) {
+                const db = e.target.result;
+                const tx = db.transaction('files', 'readonly');
+                const getReq = tx.objectStore('files').get('customRingtone');
+                getReq.onsuccess = function() {
+                    const file = getReq.result;
+                    if (file) {
+                        const url = URL.createObjectURL(file);
+                        ringtone.src = url;
+                    } else {
+                        ringtone.src = "lonely.mp3";
+                    }
+                };
+            };
+        } else if (selected) {
+            ringtone.src = selected;
+        } else {
+            ringtone.src = "lonely.mp3";
+        }
+    }
+
+    function updateDisplay(secs) {
+        const h = Math.floor(secs / 3600);
+        const m = Math.floor((secs % 3600) / 60);
+        const s = secs % 60;
+        timerDisplay.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+    }
+
+    function getInputSeconds() {
+        const h = parseInt(hoursInput.value, 10) || 0;
+        const m = parseInt(minutesInput.value, 10) || 0;
+        const s = parseInt(secondsInput.value, 10) || 0;
+        return h * 3600 + m * 60 + s;
+    }
+
+    function setInputsDisabled(disabled) {
+        hoursInput.disabled = disabled;
+        minutesInput.disabled = disabled;
+        secondsInput.disabled = disabled;
+    }
+
+    startBtn.onclick = function() {
+        if (paused) {
+            interval = setInterval(tick, 1000);
+            paused = false;
+            startBtn.disabled = true;
+            pauseBtn.disabled = false;
+            resetBtn.disabled = false;
+            return;
+        }
+        totalSeconds = getInputSeconds();
+        if (totalSeconds <= 0) return;
+        setInputsDisabled(true);
+        startBtn.disabled = true;
+        pauseBtn.disabled = false;
+        resetBtn.disabled = false;
+        updateDisplay(totalSeconds);
+
+        interval = setInterval(tick, 1000);
+    };
+
+    function tick() {
+        totalSeconds--;
+        updateDisplay(totalSeconds);
+        if (totalSeconds <= 0) {
+            clearInterval(interval);
+            setInputsDisabled(false);
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+            resetBtn.disabled = true;
+            ringtone.currentTime = 0;
+            ringtone.play();
+            popup.style.display = "flex";
+        }
+    }
+
+    pauseBtn.onclick = function() {
+        if (interval) {
+            clearInterval(interval);
+            paused = true;
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+        }
+    };
+
+    resetBtn.onclick = function() {
+        clearInterval(interval);
+        setInputsDisabled(false);
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+        resetBtn.disabled = true;
+        paused = false;
+        updateDisplay(getInputSeconds());
+        ringtone.pause();
+        ringtone.currentTime = 0;
+        popup.style.display = "none";
+    };
+
+    stopBtn.onclick = function() {
+        ringtone.pause();
+        ringtone.currentTime = 0;
+        popup.style.display = "none";
+    };
+
+    ringtone.addEventListener('ended', function() {
+        popup.style.display = "none";
+    });
+
+    presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            clearInterval(interval);
+            paused = false;
+            setInputsDisabled(false);
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+            resetBtn.disabled = true;
+            ringtone.pause();
+            ringtone.currentTime = 0;
+            popup.style.display = "none";
+
+            const mins = parseInt(btn.getAttribute('data-min'), 10);
+            hoursInput.value = Math.floor(mins / 60);
+            minutesInput.value = mins % 60;
+            secondsInput.value = 0;
+            updateDisplay(getInputSeconds());
+        });
+    });
+
+    [hoursInput, minutesInput, secondsInput].forEach(input => {
+        input.addEventListener('input', () => {
+            updateDisplay(getInputSeconds());
+        });
+    });
+
+    updateDisplay(getInputSeconds());
+
+    window.onload = function() {
+        setTimerRingtone();
+        updateDisplay(getInputSeconds());
+    };
+    </script>
+</body>
+</html>

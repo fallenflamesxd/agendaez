@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=McLaren&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+
+/* Logo image styles */
+img {
+    width: 50px;
+    height: 50px;
+    filter: invert();
+    margin-left: 30px;
+    margin-top: 0;
+}
+
+/* Color theme:
+   #78B9B5 (light teal)
+   #0F828C (teal)
+   #065084 (dark blue)
+   #447D9B (blue)
+*/
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    background-image: linear-gradient(#065084, rebeccapurple);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar at top, fixed */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    padding: 10px 30px;
+    background-color: #0F828C;
+    border-top: 8px solid #78B9B5;
+    box-shadow: 20px 10px 10px #143F6B, -20px -10px 10px #774360;
+}
+
+/* Navbar item styles */
+.navitems {
+    display: inline-block;
+    background: #0F828C;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    transition: 0.3s;
+    margin-left: 50px;
+    margin-right: 50px;
+    text-decoration: none;
+}
+.navitems:hover {
+    color: #78B9B5;
+    background-color: #555879;
+    transition: 0.3s;
+    padding: 10px 80px;
+}
+
+/* Add margin to content so it's not hidden under navbar */
+body > *:not(.navbar) {
+    margin-top: 0;
+}
+
+.timer-container,
+main {
+    margin-top: 80px;
+}
+
+
+
+.navbar img {
+    width: 50px;
+    height: 50px;
+    filter: invert();
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+/* Headings */
+h1 {
+    font-size: 80px;
+    text-align: center;
+    margin-top: 40px;
+    color: #748DAE;
+    font-family: "Cedarville Cursive", cursive;
+    font-weight: 400;
+    font-style: normal;
+    transition: 0.5s;
+}
+
+h1:hover {
+    letter-spacing: 20px;
+    font-size: 90px;
+    transition: 0.5s;
+    padding: 5px;
+}
+
+h3 {
+    text-align: center;
+    color: #0F828C;
+    margin-top: 10px;
+    font-size: 1.5em;
+}
+
+/* Paragraph */
+p {
+    max-width: 600px;
+    margin: 20px auto;
+    background: rgba(120, 185, 181, 0.15);
+    padding: 18px 24px;
+    border-radius: 12px;
+    font-size: 1.15em;
+    color: white;
+    box-shadow: 0 2px 8px rgba(6, 80, 132, 0.05);
+    font-family: "McLaren", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#set {
+    text-align: center;
+    display: block;
+    margin: 30px auto 0 auto;
+    padding: 18px 48px;           /* Reduced padding for a more button-like look */
+    background: #0F828C;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 1.5em;             /* Slightly bigger font */
+    transition: 0.3s;
+    text-decoration: none;
+    font-family: "McLaren", sans-serif;
+    max-width: 300px;             /* Prevents button from stretching too wide */
+    box-sizing: border-box;
+}
+
+#set:hover {
+    color: #78B9B5;
+    background-color: #555879;
+    transition: 0.3s;
+    padding: 22px 60px;           /* Slight increase on hover */
+}
+
+#ringtone-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.4);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#stop-ringtone-btn {
+    margin: 0; /* Remove any margin that could offset the button */
+    /* Optional: add min-width or max-width if you want a specific size */
+}

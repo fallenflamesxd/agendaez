@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Ringtone</title>
+    <link rel="stylesheet" href="ringtones.css">
+    <link rel="icon" type="image/x-icon" href="image-removebg-preview.png">
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html"><img src="image-removebg-preview.png"></a>
+        <a href="timer.html" class="navitems">Timer</a>
+        <a href="ringtones.html" class="navitems">Ringtone</a>
+        <a href="#" class="navitems">About</a>
+    </div>
+    <div class="ringtone-list">
+        <h2>Select a Ringtone</h2>
+        <form id="ringtoneForm">
+            <div class="ringtone-option">
+                <input type="radio" id="lonely" name="ringtone" value="lonely.mp3">
+                <label for="lonely">Lonely</label>
+                <button type="button" class="ringtone-play" onclick="playRingtone('lonely.mp3')">Play</button>
+                <button type="button" class="ringtone-stop" id="stopLonely" onclick="stopRingtone()">Stop</button>
+            </div>
+            <div class="ringtone-option">
+                <input type="radio" id="virus" name="ringtone" value="virus.mp3">
+                <label for="virus">Virus</label>
+                <button type="button" class="ringtone-play" onclick="playRingtone('virus.mp3')">Play</button>
+                <button type="button" class="ringtone-stop" id="stopVirus" onclick="stopRingtone()">Stop</button>
+            </div>
+            <div class="ringtone-option">
+                <input type="radio" id="custom" name="ringtone" value="custom">
+                <label for="custom">Custom</label>
+                <input type="file" id="customFile" accept=".mp3" style="margin-left:8px;">
+                <button type="button" class="ringtone-play" onclick="playCustomRingtone()">Play</button>
+                <button type="button" class="ringtone-stop" id="stopCustom" onclick="stopRingtone()">Stop</button>
+            </div>
+            <button type="submit" style="margin-top:24px; font-size:1.1em; padding:10px 32px; border-radius:8px; background:#0F828C; color:#fff; border:none; cursor:pointer;">Save Selection</button>
+        </form>
+        <audio id="audioPreview"></audio>
+    </div>
+    <script>
+    let currentStopBtn = null;
+    let customFileURL = null;
+
+    function playRingtone(src) {
+        const audio = document.getElementById('audioPreview');
+        audio.src = src;
+        audio.currentTime = 0;
+        audio.play();
+
+        document.querySelectorAll('.ringtone-stop').forEach(btn => btn.classList.remove('active'));
+        if (src === 'lonely.mp3') {
+            currentStopBtn = document.getElementById('stopLonely');
+        } else if (src === 'virus.mp3') {
+            currentStopBtn = document.getElementById('stopVirus');
+        }
+        if (currentStopBtn) currentStopBtn.classList.add('active');
+    }
+
+    function playCustomRingtone() {
+        const fileInput = document.getElementById('customFile');
+        const audio = document.getElementById('audioPreview');
+        if (fileInput.files.length > 0) {
+            if (customFileURL) URL.revokeObjectURL(customFileURL);
+            customFileURL = URL.createObjectURL(fileInput.files[0]);
+            audio.src = customFileURL;
+            audio.currentTime = 0;
+            audio.play();
+
+            document.querySelectorAll('.ringtone-stop').forEach(btn => btn.classList.remove('active'));
+            currentStopBtn = document.getElementById('stopCustom');
+            currentStopBtn.classList.add('active');
+        } else {
+            // Try to load from IndexedDB if no file selected
+            loadCustomFileFromDB(function(file) {
+                if (file) {
+                    customFileURL = URL.createObjectURL(file);
+                    audio.src = customFileURL;
+                    audio.currentTime = 0;
+                    audio.play();
+                    document.querySelectorAll('.ringtone-stop').forEach(btn => btn.classList.remove('active'));
+                    currentStopBtn = document.getElementById('stopCustom');
+                    currentStopBtn.classList.add('active');
+                } else {
+                    alert('Please select or save a custom MP3 file first.');
+                }
+            });
+        }
+    }
+
+    function stopRingtone() {
+        const audio = document.getElementById('audioPreview');
+        audio.pause();
+        audio.currentTime = 0;
+        if (currentStopBtn) currentStopBtn.classList.remove('active');
+    }
+
+    document.getElementById('audioPreview').addEventListener('ended', function() {
+        if (currentStopBtn) currentStopBtn.classList.remove('active');
+    });
+
+    // IndexedDB helpers
+    function saveCustomFileToDB(file) {
+        const request = indexedDB.open('RingtoneDB', 1);
+        request.onupgradeneeded = function(e) {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains('files')) {
+                db.createObjectStore('files');
+            }
+        };
+        request.onsuccess = function(e) {
+            const db = e.target.result;
+            const tx = db.transaction('files', 'readwrite');
+            tx.objectStore('files').put(file, 'customRingtone');
+        };
+    }
+
+    function loadCustomFileFromDB(callback) {
+        const request = indexedDB.open('RingtoneDB', 1);
+        request.onsuccess = function(e) {
+            const db = e.target.result;
+            const tx = db.transaction('files', 'readonly');
+            const getReq = tx.objectStore('files').get('customRingtone');
+            getReq.onsuccess = function() {
+                callback(getReq.result);
+            };
+        };
+    }
+
+    // Save selection and custom file
+    document.getElementById('ringtoneForm').onsubmit = function(e) {
+        e.preventDefault();
+        const selected = document.querySelector('input[name="ringtone"]:checked').value;
+        if (selected === 'custom') {
+            const fileInput = document.getElementById('customFile');
+            if (fileInput.files.length === 0) {
+                // Try to load from IndexedDB if no file selected
+                loadCustomFileFromDB(function(file) {
+                    if (file) {
+                        localStorage.setItem('selectedRingtone', 'custom');
+                        alert('Custom ringtone loaded from previous save!');
+                    } else {
+                        alert('Please upload a custom MP3 file.');
+                    }
+                });
+                return;
+            }
+            saveCustomFileToDB(fileInput.files[0]);
+            localStorage.setItem('selectedRingtone', 'custom');
+            localStorage.setItem('customRingtoneName', fileInput.files[0].name);
+            alert('Custom ringtone saved and will persist across reloads!');
+        } else {
+            localStorage.setItem('selectedRingtone', selected);
+            alert('Ringtone saved!');
+        }
+    };
+
+    // On page load, set radio and preview if custom exists
+    window.onload = function() {
+        const selected = localStorage.getItem('selectedRingtone');
+        if (selected === 'custom') {
+            document.getElementById('custom').checked = true;
+            loadCustomFileFromDB(function(file) {
+                if (file) {
+                    const audio = document.getElementById('audioPreview');
+                    customFileURL = URL.createObjectURL(file);
+                    audio.src = customFileURL;
+                }
+            });
+        } else if (selected === 'lonely.mp3') {
+            document.getElementById('lonely').checked = true;
+        } else if (selected === 'virus.mp3') {
+            document.getElementById('virus').checked = true;
+        }
+    };
+    </script>
